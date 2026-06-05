@@ -1,0 +1,186 @@
+// learning how to import express and build a web server side that listens to HTTP
+
+import express from 'express';
+
+import session from 'express-session';
+
+import flash from './src/middleware/flash.js';
+
+import { fileURLToPath } from 'url';
+
+import path from 'path';
+
+import { testConnection } from './src/models/db.js';
+
+import router from './src/routes.js';
+
+// after the .env file is created we'll modify the server.js file to use the environment
+// variables instead of hardcoding the values
+
+const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
+
+const PORT = process.env.PORT || 3000;
+
+const SESSION_SECRET = process.env.SESSION_SECRET;
+
+// creating the __filename and __dirname variables to be used in the server.js file to get
+// the current file name and directory name
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
+
+const app = express();
+
+/**
+  * Configure Express middleware
+  */
+
+// Set up session management
+
+app.use(session({
+
+    secret: SESSION_SECRET,
+
+    resave: false,
+
+    saveUninitialized: true,
+
+  cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
+    
+}));
+
+// use flashmessage middleware to handle flash messages in the application
+
+app.use(flash);
+
+
+// Allow Express to receive and process common POST data
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Set EJS as the templating Engine
+app.set('view engine', 'ejs');
+
+// Tell Express where to find your templates
+app.set('views', path.join(__dirname, 'src/views'));
+
+// adding the middleware come after the view engine and views configuration
+// because the middleware needs to be set up before the routes are defined,
+// and the view engine and views configuration need to be set up before the middleware
+// is defined. This is because the middleware will be used to serve static files and handle
+// requests, while the view engine and views configuration will be used to render the
+// templates for the routes. If the middleware is defined before the view engine and views
+// configuration, it may not work properly because it may not have access to the necessary resources.
+
+// Set up session management
+app.use(session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
+}));
+
+
+app.use((req, res, next) => {
+  
+  if (NODE_ENV === 'development') {
+
+    console.log(`${req.method} ${req.url}`);
+
+  }
+
+  next(); //pass control to the next middleware function or route handler
+
+});
+
+// middleware function to make NODE_ENV available in all EJS templates
+
+app.use((req, res, next) => {
+
+  res.locals.NODE_ENV = NODE_ENV;
+
+  next();
+
+});
+
+
+/**
+  * Routes
+  */
+
+// dynamically populating the page titles
+
+app.use(router); // Use the router for all routes defined in src/routes.js
+
+
+// adding the catch-all error route for 404 errors
+
+app.use((req, res, next) => {
+
+  const err = new Error('Page Not Found');
+
+  err.status = 404;
+
+  next(err);
+
+});
+
+// creating the global error handler middleware to
+// catch any errors that occur in the routes and send a response to the client
+
+app.use((err, req, res, next) => {
+
+  // log error details for debugging
+
+  console.error('Error Occurred:', err.message);
+
+
+  console.error('Stack Trace:', err.stack);
+
+  // Determine status and template based on error type
+  
+  const status = err.status || 500;
+
+  const template = status === 404 ? '404' : '500';
+
+  // Prepare data for the template
+
+  const context = {
+
+    title: status === 404 ? 'Page Not Found' : 'Server Error',
+
+    error: err.message,
+
+    stack: err.stack
+
+  };
+
+  // Render the appropriate error template with the context data
+  
+  res.status(status).render(`errors/${template}`, context);
+
+});
+
+app.listen(PORT, async () => {
+
+  try {
+
+    await testConnection();
+
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
+
+    console.log(`Environment: ${NODE_ENV}`);
+
+  } catch (error) {
+
+    console.error('Error connecting to the database:', error);
+
+  }
+
+});

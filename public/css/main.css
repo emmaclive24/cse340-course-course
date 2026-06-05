@@ -1,0 +1,440 @@
+/* ============================================
+   Fixed Nested CSS - Proper Nav Behavior
+   ============================================ */
+
+:root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --gold: #fbbf24;
+    --border: #e2e8f0;
+    --shadow: rgba(15, 23, 42, 0.08);
+    --radius: 16px;
+
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+}
+
+body.dark-mode {
+    --bg: #0a0f1c;
+    --surface: #111827;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #1e2937;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* RESET */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==================== HEADER ==================== */
+header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 12px var(--shadow);
+    z-index: 100;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text);
+        flex: 1;
+        text-align: center;
+    }
+
+    button {
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.6rem;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(16, 185, 129, 0.1);
+        }
+    }
+}
+
+/* Hamburger */
+.hamburger {
+    font-size: 1.9rem;
+    color: var(--gold);
+    padding: 8px;
+    cursor: pointer;
+
+    &::before {
+        content: "☰";
+    }
+
+    &.show::before {
+        content: "✕";
+    }
+}
+
+/* Navigation */
+#nav-list {
+    width: 100%;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 4px 12px var(--shadow);
+    display: none;
+    flex-direction: column;
+    z-index: 99;
+    margin-top: 10px;
+
+    &.show {
+        display: flex;
+    }
+
+    ul {
+        list-style: none;
+        width: 100%;
+    }
+
+    li a {
+        display: block;
+        padding: 18px 24px;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 1.1rem;
+        border-bottom: 1px solid var(--border);
+        transition: all 0.2s ease;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover,
+        &[aria-current="page"] {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding-left: 32px;
+        }
+    }
+}
+
+/* Flash message styles */
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+  &.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+
+  &.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+  }
+
+  &.warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+  }
+
+  &.info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+  }
+}
+
+/* Main Content */
+html {
+    font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.1rem);
+}
+
+body {
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--bg);
+}
+
+main {
+    flex: 1;
+    padding: clamp(1rem, 1.8vw, 2.5rem);
+    background: var(--bg);
+    width: min(100%, 1200px);
+    margin: 0 auto;
+}
+
+main h1,
+main h2,
+main h3,
+main h4 {
+    line-height: 1.1;
+}
+
+main h1 {
+    font-size: clamp(2rem, 2.75vw, 3.2rem);
+    margin-bottom: 1rem;
+}
+
+main h2 {
+    font-size: clamp(1.5rem, 2.2vw, 2.5rem);
+    margin-bottom: 0.85rem;
+}
+
+main p,
+main li,
+main label,
+main a {
+    font-size: 1rem;
+}
+
+main a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+main a:hover {
+    color: #0f766e;
+    text-decoration: underline;
+}
+
+form {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) - 4px);
+    box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+}
+
+form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+form label {
+    font-weight: 600;
+    color: var(--text);
+}
+
+form input,
+form textarea,
+form select {
+    width: 100%;
+    min-height: 3rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    outline: none;
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.08);
+}
+
+form button,
+button,
+input[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.4rem;
+    padding: 0 1.5rem;
+    font-weight: 700;
+    color: white;
+    background: var(--accent);
+    border: none;
+    border-radius: 999px;
+    box-shadow: 0 16px 30px rgba(16, 185, 129, 0.18);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+form button:hover,
+button:hover,
+input[type="submit"]:hover {
+    transform: translateY(-1px);
+    background: #0f766e;
+    box-shadow: 0 20px 32px rgba(16, 185, 129, 0.24);
+}
+
+form .form-group small,
+.form-note {
+    color: var(--text-muted);
+}
+
+@media screen and (max-width: 43.75rem) {
+    form {
+        padding: 1.25rem;
+        border-radius: 14px;
+    }
+    header {
+        padding: 1rem;
+    }
+    main {
+        padding: 1rem;
+    }
+    form input,
+    form textarea,
+    form select {
+        padding: 0.95rem 1rem;
+    }
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: var(--spacing-lg);
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+form input[type="checkbox"] {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--accent);
+}
+
+form .checkbox-group,
+form .form-group--checkboxes {
+    display: grid;
+    gap: 0.9rem;
+}
+
+form .checkbox-group label,
+form .form-group--checkboxes label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.list-cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.list-cards.auto {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.list-cards.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    padding: 0;
+}
+
+.list-cards.chips li {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-weight: 600;
+    list-style: none;
+}
+
+.list-cards li.card {
+    padding: 1.15rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.list-cards li.card h3,
+.list-cards li.card strong {
+    margin: 0;
+    color: var(--text);
+}
+
+.list-cards li.card p,
+.list-cards li.card small {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.list-cards li.card a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.list-cards li.card a:hover {
+    color: #0f766e;
+}
+
+ul,
+ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.2rem;
+}
+
+li {
+    margin-bottom: 0.9rem;
+}

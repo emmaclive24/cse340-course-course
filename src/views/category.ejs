@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+    <main>
+
+        <h1>
+            <%= title %>
+        </h1>
+
+        <h2>
+            <%= category.category_name %>
+        </h2>
+        
+        <h3>Service Projects</h3>
+        
+        <ul class="list-cards auto">
+        
+            <% projects.forEach(project => { %>
+        
+                <li class="card">
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.title %>
+                    </a>
+                </li>
+        
+                <% }); %>
+        
+        </ul>
+
+        <p><a href="/edit-category/<%= category.category_id %>">Edit Category</a></p>
+
+    </main>
+
+    <%- include('partials/footer') %>
