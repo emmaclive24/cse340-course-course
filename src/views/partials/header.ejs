@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title><%= title %></title>
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="stylesheet" href="/css/large.css">
+
+    <script src="/script/app.mjs" type="module"></script>
+
+</head>
+
+<body>
+
+    <header>
+
+        <button id="dark-mode-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        
+        <button id="nav-btn" class="hamburger"></button>
+
+        <nav id="nav-list" class="nav-bar">
+        
+            <ul>
+        
+                <li><a href="/">Home</a></li>
+        
+                <li><a href="/organizations">Organizations</a></li>
+        
+                <li><a href="/projects">Projects</a></li>
+        
+                <li><a href="/categories">Categories</a></li>
+        
+            </ul>
+        
+        </nav>
+
+    </header>
+
+    <!-- FLASH MESSAGES — styled with alert CSS class -->
+    <% const messages = flash(); %>
+    <% Object.keys(messages).forEach(type => { %>
+        <% if (messages[type].length > 0) { %>
+            <% messages[type].forEach(msg => { %>
+                <div class="alert <%= type %>">
+                    <%= msg %>
+                </div>
+            <% }); %>
+        <% } %>
+    <% }); %>
+

@@ -1,0 +1,52 @@
+<%- include('partials/header') %>
+
+    <main>
+
+        <h1>
+        
+            <%= title %>
+        
+        </h1>
+
+        <h2>Upcoming Service Projects</h2>
+        
+        <ul class="list-cards auto">
+
+            <% projects.forEach(project=> { %>
+
+                <li class="card">
+
+                    <strong>
+
+                        <a href="/project/<%= project.project_id %>">
+                            <%= project.title %>
+                        </a>
+
+                    </strong>
+                    
+                    <br>
+
+                    <%= new Date(project.date).toLocaleDateString('en-US', { year: 'numeric' , month: 'long' , day: 'numeric' }) %>
+                    
+                    <br>
+                    
+                    Organization:
+
+                    <a href="/organizations/<%= project.organization_id %>">
+                        <%= project.organization_name %>
+                    </a>
+
+                    <br>
+                    <a href="/assign-categories/<%= project.project_id %>">Edit Categories</a>
+
+                </li>
+                
+            <% }); %>
+        
+        </ul>
+
+        <p><a href="/new-project">Add a New Service Project</a></p>
+
+    </main>
+
+    <%- include('partials/footer') %>
